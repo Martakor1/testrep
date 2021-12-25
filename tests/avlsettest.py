@@ -1,4 +1,6 @@
 import unittest
+from teamcity import is_running_under_teamcity
+from teamcity.unittestpy import TeamcityTestRunner
 import os
 
 def uploadInput(amount, inputStr):
@@ -22,4 +24,9 @@ class TestSum(unittest.TestCase):
         result = downloadOutput()
         self.assertEqual(result, expectedOut)
 
-unittest.main()
+if __name__ == '__main__':
+    if is_running_under_teamcity():
+        runner = TeamcityTestRunner()
+    else:
+        runner = unittest.TextTestRunner()
+    unittest.main(testRunner=runner)
